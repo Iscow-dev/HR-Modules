@@ -59,7 +59,33 @@ if st.session_state.logged_in:
             }
         )
 
+ if app == "Employee Info Sheet":
+        # Inject custom CSS for styling
+        st.markdown("""
+            <style>
+                /* Style for text input fields */
+                .stTextInput>div>div>input {
+                    width: 500px !important;
+                    height: 20px !important;
+                    font-size: 16px !important;
+                }
 
+                /* Style for date input fields */
+                input[type="date"] {
+                    width: 380px !important;
+                    height: 40px !important;
+                    font-size: 16px !important;
+                }
+
+                /* Style for radio buttons */
+                .stRadio>div>label {
+                    font-size: 18px !important;
+                }
+            </style>
+        """, unsafe_allow_html=True)
+
+
+        st.title("Employee Information Sheet")
 
 
 
