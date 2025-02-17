@@ -22,3 +22,101 @@ page_bg_img = f"""
 """
 
 st.markdown(page_bg_img, unsafe_allow_html=True)
+
+
+# Initialize session state if it doesn't exist
+if 'logged_in' not in st.session_state:
+    st.session_state.logged_in = False
+
+
+#Accounts that can be logged im (Also edit the last part for the credentials)
+# Define valid credentials
+valid_username = "user"
+valid_password = "password"
+valid_username1 = "user2"
+valid_password1 = "password2"
+
+# If user is already logged in, show the slots
+if st.session_state.logged_in:
+    st.write("")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#LOGIN continuation
+else:
+    # Show login form if not logged in
+    st.title("Login")
+
+    username = st.text_input("Username")
+    password = st.text_input("Password", type="password")
+
+    if st.button("Login"):
+        if username == valid_username and password == valid_password:
+            # If the first username and password match
+            st.session_state.logged_in = True
+            st.success("***Kindly press login to continue!!!***")
+        elif username == valid_username1 and password == valid_password1:
+            # If the second username and password match
+            st.session_state.logged_in = True
+            st.success("***Kindly press login to continue!!!***")
+        else:
+            st.error("Invalid username or password!")
