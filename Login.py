@@ -1,13 +1,10 @@
 import streamlit as st
 from streamlit_option_menu import option_menu
 
-
-
-#LOGIN
+# LOGIN
 # Apply custom CSS to adjust the size of the text input fields
 page_bg_img = f"""
 <style>
-
 .st-emotion-cache-1yiq2ps {{
     background-image: url("https://images.unsplash.com/photo-1735908235870-f4dd182a2f12?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D.jpg");        
     background-size: cover;
@@ -18,19 +15,16 @@ page_bg_img = f"""
 .st-emotion-cache-pb6fr7 {{
     width: 380px;
 }}
-
 </style>
 """
 
 st.markdown(page_bg_img, unsafe_allow_html=True)
 
-
 # Initialize session state if it doesn't exist
 if 'logged_in' not in st.session_state:
     st.session_state.logged_in = False
 
-
-#Accounts that can be logged im (Also edit the last part for the credentials)
+# Accounts that can be logged in (Also edit the last part for the credentials)
 # Define valid credentials
 valid_username = "user"
 valid_password = "password"
@@ -41,14 +35,10 @@ valid_password1 = "password2"
 if st.session_state.logged_in:
     st.write("")
 
-
-
-#HR MODULE
-    # Sidebar menu with options
     with st.sidebar:
         app = option_menu(
             menu_title="HR Modules",  # Title of the menu
-            options=["Employee Info Sheet", "Employee Profile", "Daily time record", "Payroll","Mandatory Benefits Report", "Downloads"],  # Menu options
+            options=["Employee Info Sheet", "Employee Profile", "Daily time record", "Payroll", "Mandatory Benefits Report", "Downloads"],  # Menu options
             icons=["house-fill", "people-fill", "clock", "calculator", "shield", "download"],  # Icons for each option
             styles={
                 "container": {"padding": "5px", "background-color": "#f0f0f5"},
@@ -59,7 +49,8 @@ if st.session_state.logged_in:
             }
         )
 
- if app == "Employee Info Sheet":
+    # This line should have no extra indentation!
+    if app == "Employee Info Sheet":
         # Inject custom CSS for styling
         st.markdown("""
             <style>
@@ -84,10 +75,7 @@ if st.session_state.logged_in:
             </style>
         """, unsafe_allow_html=True)
 
-
         st.title("Employee Information Sheet")
-
-
 
 
 
