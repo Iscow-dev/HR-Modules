@@ -77,7 +77,101 @@ if st.session_state.logged_in:
 
         st.title("Employee Information Sheet")
 
+        # Create two columns
+        col1, col2 = st.columns(2)
 
+        # First column
+        with col1:
+            first_name = st.text_input("First Name:")
+            middle_name = st.text_input("Middle Name:")
+            last_name = st.text_input("Last Name:")
+            id_number = st.text_input("ID Number")
+            date_hired = st.date_input("Date Hired", value=None)
+            civil_status = st.selectbox("Civil status:", ["Single", "Married", "Divorced", "Widowed"], index=None)
+
+        # Second column
+        with col2:
+            birthdate = st.date_input("Birthdate", value=None)
+            educational_attainment = st.selectbox(
+                "Educational Attainment",
+                ["N/A", "Doctorate", "Masters Graduate", "College Graduate", "K+12", "High School Graduate",
+                 "Elementary Graduate"],
+                index=None
+            )
+            salary = st.number_input("Salary rate", min_value=0.0, step=100.0)
+            wage_structure = st.selectbox("Wage Structure (daily/monthly)", ["Daily", "Monthly"], index=None)
+
+
+        # Function to create "Employee Name" by combining last_name, first_name, and middle_name (middle initial)
+        def create_employee_name(first_name, middle_name, last_name):
+            middle_initial = middle_name[0] + '.' if middle_name else ''
+            return f"{last_name}, {first_name} {middle_initial}"
+
+
+        # Validate form data before submitting
+        if st.button("Submit"):
+            # Check if all required fields are filled
+            if not first_name or not last_name or not id_number or not civil_status or not date_hired or not birthdate:
+                st.error("Please fill in all required fields.")
+            elif not salary or salary <= 0:
+                st.error("Please enter a valid salary.")
+            elif educational_attainment == "N/A":
+                st.error("Please select a valid educational attainment.")
+            else:
+                # Create a DataFrame for the complete employee details
+                complete_data = {
+                    "First Name": [first_name],
+                    "Middle Name": [middle_name],
+                    "Last Name": [last_name],
+                    "Birthdate": [birthdate],
+                    "Date Hired": [date_hired],
+                    "Civil Status": [civil_status],
+                    "ID Number": [id_number],
+                    "Salary Rate": [salary],
+                    "Wage Structure": [wage_structure]
+                }
+                complete_df = pd.DataFrame(complete_data)
+
+                # File paths to save the data
+                complete_file_path = "employee_complete_info.xlsx"
+                salary_file_path = "employee_salary_info.xlsx"
+
+                try:
+                    # Check if the complete employee details file exists
+                    existing_complete_df = pd.read_excel(complete_file_path)
+
+                    # Append the new data to the existing complete employee details file
+                    updated_complete_df = pd.concat([existing_complete_df, complete_df], ignore_index=True)
+                    updated_complete_df.to_excel(complete_file_path, index=False)  # Save the updated data
+
+                except FileNotFoundError:
+                    # If the file doesn't exist, create a new one
+                    complete_df.to_excel(complete_file_path, index=False)  # Save the data to the complete info file
+
+                # Create a DataFrame for the ID Number and Salary info
+                employee_name = create_employee_name(first_name, middle_name, last_name)
+                salary_data = {
+                    "Employee ID": [id_number],
+                    "Employee Name": [employee_name],  # Use the function to combine names
+                    "Salary": [salary],
+                    "Wage Structure": [wage_structure]
+                }
+                salary_df = pd.DataFrame(salary_data)
+
+                try:
+                    # Check if the salary file exists
+                    existing_salary_df = pd.read_excel(salary_file_path)
+
+                    # Append the new data to the existing salary file
+                    updated_salary_df = pd.concat([existing_salary_df, salary_df], ignore_index=True)
+                    updated_salary_df.to_excel(salary_file_path, index=False)  # Save the updated salary data
+
+                except FileNotFoundError:
+                    # If the file doesn't exist, create a new one
+                    salary_df.to_excel(salary_file_path, index=False)  # Save the data to the salary file
+
+                # Confirmation message
+                st.success("Data successfully saved")
 
 
 
