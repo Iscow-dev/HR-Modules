@@ -179,7 +179,7 @@ if st.session_state.logged_in:
                 # Confirmation message
                 st.success("Data successfully saved")
 
-                SHEET_URL = "https://docs.google.com/spreadsheets/d/1wHb9wFMNtsdpUkzt5KhJErslzFy9BzwZn0Hoh7oAXJU/edit?usp=sharing"
+                SHEET_URL = "https://forms.gle/JZkU8q178zw4QJyH7"
 
                 # Modify the link to use the export feature for CSV format
                 csv_url = SHEET_URL.replace("/edit", "/gviz/tq?tqx=out:csv")
