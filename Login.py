@@ -135,24 +135,25 @@ if st.session_state.logged_in:
                     "Salary Rate": [salary],
                     "Wage Structure": [wage_structure]
                 }
+
                 complete_df = pd.DataFrame(complete_data)
 
-                # Updated file paths to save the data
-                complete_file_path = "G:/My Drive/employee_complete_info.xlsx"  # Change to your Google Drive path
-                salary_file_path = "G:/My Drive/employee_salary_info.xlsx"  # Change to your Google Drive path
-                
+                # File paths to save the data
+                complete_file_path = "employee_complete_info.xlsx"
+                salary_file_path = "employee_salary_info.xlsx"
+
                 try:
                     # Check if the complete employee details file exists
                     existing_complete_df = pd.read_excel(complete_file_path)
-                
+
                     # Append the new data to the existing complete employee details file
                     updated_complete_df = pd.concat([existing_complete_df, complete_df], ignore_index=True)
                     updated_complete_df.to_excel(complete_file_path, index=False)  # Save the updated data
-                
+
                 except FileNotFoundError:
                     # If the file doesn't exist, create a new one
                     complete_df.to_excel(complete_file_path, index=False)  # Save the data to the complete info file
-                
+
                 # Create a DataFrame for the ID Number and Salary info
                 employee_name = create_employee_name(first_name, middle_name, last_name)
                 salary_data = {
@@ -162,22 +163,21 @@ if st.session_state.logged_in:
                     "Wage Structure": [wage_structure]
                 }
                 salary_df = pd.DataFrame(salary_data)
-                
+
                 try:
                     # Check if the salary file exists
                     existing_salary_df = pd.read_excel(salary_file_path)
-                
+
                     # Append the new data to the existing salary file
                     updated_salary_df = pd.concat([existing_salary_df, salary_df], ignore_index=True)
                     updated_salary_df.to_excel(salary_file_path, index=False)  # Save the updated salary data
-                
+
                 except FileNotFoundError:
                     # If the file doesn't exist, create a new one
                     salary_df.to_excel(salary_file_path, index=False)  # Save the data to the salary file
-                
+
                 # Confirmation message
                 st.success("Data successfully saved")
-
 
 
 
