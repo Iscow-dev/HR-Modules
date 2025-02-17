@@ -5,6 +5,8 @@ from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 import os
+import git
+from datetime import datetime
 
 # LOGIN
 # Apply custom CSS to adjust the size of the text input fields
@@ -82,10 +84,19 @@ if st.session_state.logged_in:
 
         st.title("Employee Information Sheet")
 
-        # Create two columns
+        # Set up Git repository details (replace with your actual GitHub repository details)
+        REPO_DIR = "/path/to/your/local/repo"  # Local path to your cloned GitHub repo
+        REPO_URL = "https://github.com/yourusername/yourrepo.git"  # Your GitHub repository URL
+        BRANCH_NAME = "main"  # The branch to commit to (e.g., main or master)
+        
+        # Ensure that the repo is cloned locally
+        if not os.path.exists(REPO_DIR):
+            print("Cloning the repository...")
+            git.Repo.clone_from(REPO_URL, REPO_DIR)
+        
+        # Create two columns for user input
         col1, col2 = st.columns(2)
-
-        # First column
+        
         with col1:
             first_name = st.text_input("First Name:")
             middle_name = st.text_input("Middle Name:")
@@ -93,26 +104,22 @@ if st.session_state.logged_in:
             id_number = st.text_input("ID Number")
             date_hired = st.date_input("Date Hired", value=None)
             civil_status = st.selectbox("Civil status:", ["Single", "Married", "Divorced", "Widowed"], index=None)
-
-        # Second column
+        
         with col2:
             birthdate = st.date_input("Birthdate", value=None)
             educational_attainment = st.selectbox(
                 "Educational Attainment",
-                ["N/A", "Doctorate", "Masters Graduate", "College Graduate", "K+12", "High School Graduate",
-                 "Elementary Graduate"],
+                ["N/A", "Doctorate", "Masters Graduate", "College Graduate", "K+12", "High School Graduate", "Elementary Graduate"],
                 index=None
             )
             salary = st.number_input("Salary rate", min_value=0.0, step=100.0)
             wage_structure = st.selectbox("Wage Structure (daily/monthly)", ["Daily", "Monthly"], index=None)
-
-
+        
         # Function to create "Employee Name" by combining last_name, first_name, and middle_name (middle initial)
         def create_employee_name(first_name, middle_name, last_name):
             middle_initial = middle_name[0] + '.' if middle_name else ''
             return f"{last_name}, {first_name} {middle_initial}"
-
-
+        
         # Validate form data before submitting
         if st.button("Submit"):
             # Check if all required fields are filled
@@ -135,49 +142,33 @@ if st.session_state.logged_in:
                     "Salary Rate": [salary],
                     "Wage Structure": [wage_structure]
                 }
-
+        
                 complete_df = pd.DataFrame(complete_data)
-
-                # File paths to save the data
-                complete_file_path = "C:/Users/hp/Documents/employee_complete_info.xlsx"
-                salary_file_path = "C:/Users/hp/Documents/employee_salary_info.xlsx"
-
-                try:
-                    # Check if the complete employee details file exists
-                    existing_complete_df = pd.read_excel(complete_file_path)
-
-                    # Append the new data to the existing complete employee details file
-                    updated_complete_df = pd.concat([existing_complete_df, complete_df], ignore_index=True)
-                    updated_complete_df.to_excel(complete_file_path, index=False)  # Save the updated data
-
-                except FileNotFoundError:
-                    # If the file doesn't exist, create a new one
-                    complete_df.to_excel(complete_file_path, index=False)  # Save the data to the complete info file
-
-                # Create a DataFrame for the ID Number and Salary info
-                employee_name = create_employee_name(first_name, middle_name, last_name)
-                salary_data = {
-                    "Employee ID": [id_number],
-                    "Employee Name": [employee_name],  # Use the function to combine names
-                    "Salary": [salary],
-                    "Wage Structure": [wage_structure]
-                }
-                salary_df = pd.DataFrame(salary_data)
-
-                try:
-                    # Check if the salary file exists
-                    existing_salary_df = pd.read_excel(salary_file_path)
-
-                    # Append the new data to the existing salary file
-                    updated_salary_df = pd.concat([existing_salary_df, salary_df], ignore_index=True)
-                    updated_salary_df.to_excel(salary_file_path, index=False)  # Save the updated salary data
-
-                except FileNotFoundError:
-                    # If the file doesn't exist, create a new one
-                    salary_df.to_excel(salary_file_path, index=False)  # Save the data to the salary file
-
+        
+                # Define the file path to save the employee data (local file in the repository)
+                complete_file_path = os.path.join(REPO_DIR, "employee_data.csv")
                 
-
+                # Save the data to a CSV file in the GitHub repo
+                try:
+                    if os.path.exists(complete_file_path):
+                        existing_df = pd.read_csv(complete_file_path)
+                        updated_df = pd.concat([existing_df, complete_df], ignore_index=True)
+                        updated_df.to_csv(complete_file_path, index=False)
+                    else:
+                        complete_df.to_csv(complete_file_path, index=False)
+                    
+                    # Commit the changes to the local repo
+                    repo = git.Repo(REPO_DIR)
+                    repo.git.add(complete_file_path)
+                    repo.index.commit(f"Add new employee entry {first_name} {last_name} on {datetime.now()}")
+                    repo.remotes.origin.push()
+        
+                    st.success("Data successfully saved and pushed to GitHub!")
+                except Exception as e:
+                    st.error(f"An error occurred while saving to GitHub: {e}")
+        
+                
+        
 
 
 
