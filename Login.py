@@ -179,10 +179,15 @@ if st.session_state.logged_in:
                 # Confirmation message
                 st.success("Data successfully saved")
 
-                SHEET_URL =
-                "https://docs.google.com/forms/d/121p_S9blLMEM-DYiPiI4fMXdF8t7UVYw6gFpcBC0Yws/edit"
+                SHEET_URL = "https://docs.google.com/spreadsheets/d/1wHb9wFMNtsdpUkzt5KhJErslzFy9BzwZn0Hoh7oAXJU/edit?usp=sharing"
 
-                df = pd.read._csv(SHEET_URL)
+                # Modify the link to use the export feature for CSV format
+                csv_url = SHEET_URL.replace("/edit", "/gviz/tq?tqx=out:csv")
+                
+                # Read the CSV data into a DataFrame
+                df = pd.read_csv(csv_url)
+                
+                # Display the DataFrame in Streamlit
                 st.write(df)
 
 
