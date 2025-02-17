@@ -139,8 +139,8 @@ if st.session_state.logged_in:
                 complete_df = pd.DataFrame(complete_data)
 
                 # File paths to save the data
-                complete_file_path = "employee_complete_info.xlsx"
-                salary_file_path = "employee_salary_info.xlsx"
+                complete_file_path = "C:/Users/hp/Documents/employee_complete_info.xlsx"
+                salary_file_path = "C:/Users/hp/Documents/employee_salary_info.xlsx"
 
                 try:
                     # Check if the complete employee details file exists
