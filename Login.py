@@ -42,6 +42,22 @@ if st.session_state.logged_in:
 
 
 
+#HR MODULE
+    # Sidebar menu with options
+    with st.sidebar:
+        app = option_menu(
+            menu_title="HR Modules",  # Title of the menu
+            options=["Employee Info Sheet", "Employee Profile", "Daily time record", "Payroll","Mandatory Benefits Report", "Downloads"],  # Menu options
+            icons=["house-fill", "people-fill", "clock", "calculator", "shield", "download"],  # Icons for each option
+            styles={
+                "container": {"padding": "5px", "background-color": "#f0f0f5"},
+                "icon": {"color": "darkblue", "font-size": "16px"},
+                "menu-title": {"font-size": "18px", "font-weight": "bold", "color": "darkblue"},
+                "nav-link": {"font-size": "14px", "font-weight": "normal", "color": "darkblue"},
+                "nav-link-selected": {"background-color": "#a0a0a0", "color": "white"},
+            }
+        )
+
 
 
 
