@@ -1,5 +1,6 @@
 import streamlit as st
 from streamlit_option_menu import option_menu
+import pandas as pd
 
 # LOGIN
 # Apply custom CSS to adjust the size of the text input fields
